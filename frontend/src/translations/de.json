@@ -70,7 +70,9 @@
         "informationDesks": "Orte der Information",
         "courses": "Parcours",
         "experiences": "Lieux de pratique",
-        "signage": "Beschilderung"
+        "signage": "Beschilderung",
+        "infrastructure": "Infrastructures",
+        "service": "Others infos"
       },
       "resetView": "Karte zentrieren"
     }

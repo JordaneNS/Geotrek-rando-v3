@@ -21,6 +21,8 @@ import { Label } from 'modules/label/interface';
 import { TrekResult } from 'modules/results/interface';
 import { SensitiveArea } from 'modules/sensitiveArea/interface';
 import { SignageDictionary } from 'modules/signage/interface';
+import { Service } from 'modules/service/interface';
+import { InfrastructureDictionary } from 'modules/infrastructure/interface';
 import { TrekRatingWithScale } from '../trekRating/interface';
 
 export interface RawDetails {
@@ -187,6 +189,8 @@ export interface Details extends DetailsHtml {
   reservation_id: string | null;
   signage: SignageDictionary | null;
   gear: string | null;
+  service: Service[] | null;
+  infrastructure: InfrastructureDictionary | null;
 }
 
 export interface WebLink {

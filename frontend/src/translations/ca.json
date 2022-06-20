@@ -70,7 +70,9 @@
         "informationDesks": "Llocs d’informació",
         "courses": "Parcours",
         "experiences": "Lieux de pratique",
-        "signage": "Senyalització"
+        "signage": "Senyalització",
+        "infrastructure": "Infrastructures",
+        "service": "Others infos"
       },
       "resetView": "Recenter el mapa"
     }

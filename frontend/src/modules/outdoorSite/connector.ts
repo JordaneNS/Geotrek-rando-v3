@@ -1,5 +1,7 @@
 import { getSensitiveAreas } from 'modules/sensitiveArea/connector';
 import { getSignage } from 'modules/signage/connector';
+import { getService } from 'modules/service/connector';
+import { getInfrastructure } from 'modules/infrastructure/connector';
 import { getCities } from '../city/connector';
 import { getThemes } from '../filters/theme/connector';
 import { getInformationDesks } from '../informationDesk/connector';
@@ -77,6 +79,8 @@ export const getOutdoorSiteDetails = async (
       outdoorRatingScale,
       outdoorSiteType,
       signage,
+      service,
+      infrastructure,
       sensitiveAreas,
     ] = await Promise.all([
       getTrekResults(language, { near_outdoorsite: Number(id) }),
@@ -86,6 +90,8 @@ export const getOutdoorSiteDetails = async (
       getOutdoorRatingScale(language),
       getOutdoorSiteType(language),
       getSignage(language, id, 'OUTDOOR_SITE'),
+      getService(language, id, 'OUTDOOR_SITE'),
+      getInfrastructure(language, id, 'OUTDOOR_SITE'),
       getGlobalConfig().enableSensitiveAreas
         ? getSensitiveAreas('outdoorSite', Number(id), language)
         : [],
@@ -110,6 +116,8 @@ export const getOutdoorSiteDetails = async (
       outdoorSiteType,
       sensitiveAreas,
       signage,
+      service,
+      infrastructure,
     });
   } catch (e) {
     console.error('Error in outdoor course connector', e);

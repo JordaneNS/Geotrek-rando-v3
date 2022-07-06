@@ -21,11 +21,19 @@ const formatFiltersUrl = (filtersState: FilterState[]): string[] =>
     [],
   );
 
-const computeUrl = (filtersState: FilterState[], textFilter: string | null) => {
+const computeUrl = (
+  filtersState: FilterState[],
+  textFilter: string | null,
+  dateFilter: DateFilter | null,
+) => {
   const urlParams = textFilter
     ? [...formatFiltersUrl(filtersState), `text=${textFilter}`]
     : formatFiltersUrl(filtersState);
 
+  dateFilter &&
+    dateFilter.beginDate !== 'null' &&
+    urlParams.push(`beginDate=${dateFilter?.beginDate}`);
+  dateFilter && dateFilter.endDate !== 'null' && urlParams.push(`endDate=${dateFilter?.endDate}`);
   const formattedUrl = `search?${urlParams.join('&')}`;
 
   return formattedUrl;
@@ -36,7 +44,7 @@ export const useTrekResults = (
     filtersState: FilterState[];
     textFilterState: string | null;
     bboxState: string | null;
-    dateFilter: DateFilter | null;
+    dateFilter: DateFilter;
   },
   language: string,
 ) => {
@@ -53,7 +61,7 @@ export const useTrekResults = (
 
   const parsedFiltersState = parseFilters(filtersState);
 
-  const filterUrl = useRef(computeUrl(filtersState, textFilterState));
+  const filterUrl = useRef(computeUrl(filtersState, textFilterState, dateFilter));
 
   const router = useRouter();
 
@@ -100,13 +108,13 @@ export const useTrekResults = (
     );
 
   useEffect(() => {
-    const url = computeUrl(filtersState, textFilterState);
+    const url = computeUrl(filtersState, textFilterState, dateFilter);
     if (url !== filterUrl.current) {
       filterUrl.current = url;
       void router.push(url, undefined, { shallow: true });
       void refetch();
     }
-  }, [filtersState, textFilterState, refetch]);
+  }, [filtersState, textFilterState, dateFilter, refetch]);
 
   return {
     searchResults: formatInfiniteQuery(data),

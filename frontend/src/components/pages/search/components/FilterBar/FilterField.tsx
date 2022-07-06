@@ -21,7 +21,7 @@ interface Props {
   expanded: boolean;
   onClick: () => void;
   setFilterSelectedOptions: (filterId: string, options: Option[]) => void;
-  setDateFilter: () => void;
+  setDateFilter: (dFilter: DateFilter) => void;
 }
 
 const BACKGROUND_EXPANDED = '#fefefe';
@@ -109,6 +109,8 @@ const FilterField: React.FC<Props> = ({
                 item={filterState}
                 setFilterSelectedOptions={setFilterSelectedOptions}
                 hideLabel
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
               />
             </div>
             <div className="grid grid-cols-3 gap-4">

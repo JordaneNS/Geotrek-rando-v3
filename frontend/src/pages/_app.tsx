@@ -13,6 +13,11 @@ import '../public/style.css';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ListAndMapProvider } from 'modules/map/ListAndMapContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { FormattedMessage } from 'react-intl';
+
+import CookieConsent, { Cookies } from 'react-cookie-consent';
+import { colorPalette } from 'stylesheet';
+import { getGlobalConfig } from 'modules/utils/api.config';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,12 +33,46 @@ interface MyAppProps extends AppProps {
 }
 
 const MyApp = ({ Component, pageProps, hasError, errorEventId }: MyAppProps) => {
+  const { googleAnalyticsId } = getGlobalConfig();
+
+  const handleDeclineCookie = () => {
+    //remove google analytics cookies
+    Cookies.remove(`_ga_${googleAnalyticsId?.replace('G-', '') ?? ''}`);
+    Cookies.remove('_ga');
+    Cookies.remove('_gat');
+    Cookies.remove('_gid');
+  };
+
+  if (Cookies.get('cookieConsent') === 'false') {
+    handleDeclineCookie();
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <Root hasError={hasError} errorEventId={errorEventId}>
           <ListAndMapProvider>
             <Component {...pageProps} />
+            <CookieConsent
+              location="bottom"
+              cookieName="cookieConsent"
+              buttonText={<FormattedMessage id="cookie.accept" />}
+              style={{
+                background: colorPalette.primary1,
+                textAlign: 'center',
+              }}
+              buttonStyle={{ background: colorPalette.primary2, fontSize: '13px' }}
+              enableDeclineButton
+              declineButtonText={<FormattedMessage id="cookie.refuse" />}
+              declineButtonStyle={{
+                background: colorPalette.primary3,
+                color: colorPalette.primary2,
+                fontSize: '13px',
+              }}
+              onDecline={handleDeclineCookie}
+            >
+              {<FormattedMessage id="cookie.message" />}
+            </CookieConsent>
           </ListAndMapProvider>
         </Root>
         <ReactQueryDevtools initialIsOpen={false} />

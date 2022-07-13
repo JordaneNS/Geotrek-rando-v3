@@ -3,6 +3,7 @@ import parse from 'html-react-parser';
 import getNextConfig from 'next/config';
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import { Cookies } from 'react-cookie-consent';
 
 const {
   publicRuntimeConfig: { style, colors, scriptsHeaderHtml, scriptsFooterHtml },
@@ -53,7 +54,20 @@ export default class MyDocument extends Document {
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
 
-                  gtag('config', '${googleAnalyticsId}');`,
+                  gtag('config', '${googleAnalyticsId}');
+                  const fct = () => {
+                    if(document.cookie.includes("cookieConsent=false")) {
+                      var cookies = document.cookie.split(";");
+                      for (var i = 0; i < cookies.length; i++) {
+                          var cookie = cookies[i];
+                          var eqPos = cookie.indexOf("=");
+                          var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                        }
+                      document.cookie="cookieConsent=false";
+                  }
+                  }
+                  setInterval(fct, 5000)`,
                 }}
               />
             </>
